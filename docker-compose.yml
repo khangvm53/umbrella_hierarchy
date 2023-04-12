@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  php-apache:
+    container_name: php-apache
+    image: php:8.1-apache
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    volumes:
+      - ./src/:/var/www/html/
+    ports:
+      - 8000:80
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: umbrella_hierarchy
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user121@
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./src/database/umbrella_hierarchy.sql:/docker-entrypoint-initdb.d/dump.sql
